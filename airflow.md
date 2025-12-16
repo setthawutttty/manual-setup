@@ -2,21 +2,19 @@
 
 ```
 sudo dnf update -y
-sudo dnf install vim -y
+sudo dnf install -y vim git dnf-plugins-core firewalld
 ```
 
-- เช็ค version
 ```
-vim --version
-```
-```
-sudo dnf install -y dnf-utils
-sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
-sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+sudo dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
 - เปิดใช้งาน service
 ```
+sudo systemctl enable --now docker
+หรือ
 sudo systemctl start docker
 sudo systemctl enable docker
 
@@ -27,6 +25,8 @@ sudo docker run hello-world
 - user เข้า docker
 ```
 sudo usermod -aG docker $USER
+
+ออกเข้าใหม่
 ```
 
 
@@ -37,20 +37,19 @@ airflow-project/
 │  ├─ example_dag.py
 │  └─ my_dag.py
 ├─ logs/
-│  └─ <dag_id>/
-│      └─ <task_id>/
+│      
 ├─ plugins/
-│  ├─ my_plugin.py
-│  └─ helpers.py
-├─ tests/
-│  └─ test_dag.py
+│  
 ├─ docker-compose.yaml
 ├─ airflow.cfg
 ├─ requirements.txt
 └─ README.md
 
 ```
-
+- สร้าง Folder
+```
+mkdir airflow-project && cd airflow-project
+```
 - ดึงไฟล์ dockercompose ของ airflow
 ```
 curl -LfO 'https://airflow.apache.org/docs/apache-airflow/3.1.5/docker-compose.yaml'
@@ -342,14 +341,16 @@ volumes:
 ## - สร้างไฟล์ Dockerfile
 - ข้อมูลภายในตัวอย่าง
 ```
-FROM apache/airflow:3.1.3
+FROM apache/airflow:3.1.5
+
 COPY requirements.txt /
-RUN pip install --no-cache-dir "apache-airflow==${AIRFLOW_VERSION}" -r 
-/requirements.txt
+
+RUN pip install --no-cache-dir -r /requirements.txt
+
 
 ```
 
-## - สร้างไฟล์ requirements.txt (ไว้เก็บข้อมูล packege)
+## สร้างไฟล์ requirements.txt (ไว้เก็บข้อมูล packege)
 ```
 pandas
 sqlmesh[mysql]
@@ -359,12 +360,6 @@ sqlmesh[mysql]
 ```
 docker compose up --build
 ```
-
-- ถ้าไม่มี 
-```
-docker build -t
-```
-
 
 - แก้ไฟล์ config 
 ```
