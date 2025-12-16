@@ -2,7 +2,7 @@
 
 ```
 sudo dnf update -y
-sudo dnf install -y vim git dnf-plugins-core firewalld
+sudo dnf install -y vim git dnf-plugins-core
 ```
 
 ```
